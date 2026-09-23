@@ -1,19 +1,187 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Digital Closet</title>
 
     <link rel="stylesheet" href="css/style.css">
-    
 </head>
+
 <body>
 
-    <h1>Digital Closet</h1>
-    <p>Your personal digital wardrobe.</p>
+    <!-- Navigation -->
+    <header class="navbar">
+
+        <div class="logo">
+            👗 Digital Closet
+        </div>
+
+        <nav>
+            <a href="index.html" class="active">Wardrobe</a>
+            <a href="#">Outfits</a>
+            <a href="#">Favorites</a>
+        </nav>
+
+        <button class="theme-btn" id="themeBtn">
+            ☾
+        </button>
+
+    </header>
+
+
+    <main>
+
+        <!-- Hero Section -->
+        <section class="hero">
+
+            <div>
+                <p class="subtitle">MY DIGITAL WARDROBE</p>
+
+                <h1>
+                    Your Style,<br>
+                    <span>Organized.</span>
+                </h1>
+
+                <p class="hero-text">
+                    Keep track of your favorite clothes,
+                    organize your wardrobe and create
+                    outfits effortlessly.
+                </p>
+
+                <button class="primary-btn" id="addItemBtn">
+                    + Add Clothing
+                </button>
+            </div>
+
+        </section>
+
+
+        <!-- Statistics -->
+        <section class="stats">
+
+            <div class="stat-card">
+                <div class="stat-icon">👕</div>
+
+                <div>
+                    <h2 id="totalItems">0</h2>
+                    <p>Total Items</p>
+                </div>
+            </div>
+
+
+            <div class="stat-card">
+                <div class="stat-icon">✨</div>
+
+                <div>
+                    <h2 id="totalOutfits">0</h2>
+                    <p>Outfits</p>
+                </div>
+            </div>
+
+
+            <div class="stat-card">
+                <div class="stat-icon">♡</div>
+
+                <div>
+                    <h2 id="totalFavorites">0</h2>
+                    <p>Favorites</p>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- Wardrobe -->
+        <section class="wardrobe">
+
+            <div class="section-heading">
+
+                <div>
+                    <p class="subtitle">YOUR COLLECTION</p>
+                    <h2>My Wardrobe</h2>
+                </div>
+
+                <input
+                    type="search"
+                    id="searchInput"
+                    placeholder="Search clothing..."
+                >
+
+            </div>
+
+
+            <!-- Category filters -->
+            <div class="filters">
+
+                <button class="filter-btn active">
+                    All
+                </button>
+
+                <button class="filter-btn">
+                    Tops
+                </button>
+
+                <button class="filter-btn">
+                    Bottoms
+                </button>
+
+                <button class="filter-btn">
+                    Shoes
+                </button>
+
+                <button class="filter-btn">
+                    Accessories
+                </button>
+
+            </div>
+
+
+            <!-- Clothing cards -->
+            <div
+                id="clothingContainer"
+                class="clothing-grid">
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        👗
+                    </div>
+
+                    <h3>Your wardrobe is empty</h3>
+
+                    <p>
+                        Add your first clothing item
+                        to get started.
+                    </p>
+
+                    <button class="primary-btn">
+                        + Add Clothing
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer>
+
+        <p>
+            © 2026 Digital Closet
+        </p>
+
+    </footer>
+
 
     <script src="js/app.js"></script>
 
 </body>
+
 </html>
