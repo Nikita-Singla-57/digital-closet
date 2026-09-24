@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Add Clothing | Digital Closet</title>
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+
+    <header class="navbar">
+
+        <a href="index.html" class="logo">
+            👗 Digital Closet
+        </a>
+
+
+        <nav>
+
+            <a href="index.html">
+                Wardrobe
+            </a>
+
+            <a href="#">
+                Outfits
+            </a>
+
+            <a href="#">
+                Favorites
+            </a>
+
+        </nav>
+
+
+        <button
+            class="theme-btn"
+            id="themeBtn"
+            type="button"
+        >
+            ☾
+        </button>
+
+    </header>
+
+
+    <main>
+
+        <!-- Page heading -->
+
+        <section class="form-header">
+
+            <a
+                href="index.html"
+                class="back-link"
+            >
+                ← Back to Wardrobe
+            </a>
+
+            <p class="subtitle">
+                ADD TO YOUR COLLECTION
+            </p>
+
+            <h1>
+                Add Clothing
+            </h1>
+
+            <p>
+                Add a new item to your digital wardrobe.
+            </p>
+
+        </section>
+
+
+        <!-- Form -->
+
+        <section class="form-layout">
+
+
+            <!-- Image preview -->
+
+            <div class="image-panel">
+
+                <div class="image-preview">
+
+                    <div
+                        id="imagePreview"
+                        class="preview-placeholder"
+                    >
+
+                        <span>
+                            👕
+                        </span>
+
+                        <p>
+                            Clothing Preview
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <label
+                    for="clothingImage"
+                    class="upload-label"
+                >
+                    + Add Image
+                </label>
+
+                <input
+                    type="file"
+                    id="clothingImage"
+                    accept="image/*"
+                    hidden
+                >
+
+
+                <p class="image-note">
+                    Optional. JPG, PNG or WebP.
+                </p>
+
+            </div>
+
+
+            <!-- Details form -->
+
+            <div class="form-card">
+
+                <form id="clothingForm">
+
+
+                    <!-- Name -->
+
+                    <div class="form-group">
+
+                        <label for="clothingName">
+                            Clothing Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="clothingName"
+                            name="clothingName"
+                            placeholder="e.g. White Oversized T-Shirt"
+                            required
+                        >
+
+                        <small class="error-message"></small>
+
+                    </div>
+
+
+                    <!-- Category -->
+
+                    <div class="form-group">
+
+                        <label for="category">
+                            Category
+                        </label>
+
+                        <select
+                            id="category"
+                            name="category"
+                            required
+                        >
+
+                            <option value="">
+                                Select category
+                            </option>
+
+                            <option value="Tops">
+                                Tops
+                            </option>
+
+                            <option value="Bottoms">
+                                Bottoms
+                            </option>
+
+                            <option value="Dresses">
+                                Dresses
+                            </option>
+
+                            <option value="Shoes">
+                                Shoes
+                            </option>
+
+                            <option value="Accessories">
+                                Accessories
+                            </option>
+
+                            <option value="Outerwear">
+                                Outerwear
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Color -->
+
+                    <div class="form-group">
+
+                        <label for="color">
+                            Color
+                        </label>
+
+                        <input
+                            type="text"
+                            id="color"
+                            name="color"
+                            placeholder="e.g. White"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Season -->
+
+                    <div class="form-group">
+
+                        <label for="season">
+                            Season
+                        </label>
+
+                        <select
+                            id="season"
+                            name="season"
+                            required
+                        >
+
+                            <option value="">
+                                Select season
+                            </option>
+
+                            <option value="Spring">
+                                Spring
+                            </option>
+
+                            <option value="Summer">
+                                Summer
+                            </option>
+
+                            <option value="Autumn">
+                                Autumn
+                            </option>
+
+                            <option value="Winter">
+                                Winter
+                            </option>
+
+                            <option value="All Season">
+                                All Season
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Occasion -->
+
+                    <div class="form-group">
+
+                        <label for="occasion">
+                            Occasion
+                        </label>
+
+                        <select
+                            id="occasion"
+                            name="occasion"
+                            required
+                        >
+
+                            <option value="">
+                                Select occasion
+                            </option>
+
+                            <option value="Casual">
+                                Casual
+                            </option>
+
+                            <option value="Formal">
+                                Formal
+                            </option>
+
+                            <option value="Party">
+                                Party
+                            </option>
+
+                            <option value="College">
+                                College
+                            </option>
+
+                            <option value="Sports">
+                                Sports
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Size -->
+
+                    <div class="form-group">
+
+                        <label for="size">
+                            Size
+                        </label>
+
+                        <select
+                            id="size"
+                            name="size"
+                            required
+                        >
+
+                            <option value="">
+                                Select size
+                            </option>
+
+                            <option value="XS">
+                                XS
+                            </option>
+
+                            <option value="S">
+                                S
+                            </option>
+
+                            <option value="M">
+                                M
+                            </option>
+
+                            <option value="L">
+                                L
+                            </option>
+
+                            <option value="XL">
+                                XL
+                            </option>
+
+                            <option value="XXL">
+                                XXL
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Favorite -->
+
+                    <label class="favorite-option">
+
+                        <input
+                            type="checkbox"
+                            id="favorite"
+                        >
+
+                        <span>
+                            ♡
+                        </span>
+
+                        Add to favorites
+
+                    </label>
+
+
+                    <!-- Form actions -->
+
+                    <div class="form-actions">
+
+                        <a
+                            href="index.html"
+                            class="secondary-btn"
+                        >
+                            Cancel
+                        </a>
+
+                        <button
+                            type="submit"
+                            class="primary-btn"
+                        >
+                            Save Clothing
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+
+        <p>
+            © 2026 Digital Closet
+        </p>
+
+    </footer>
+
+
+    <script src="js/app.js"></script>
+
+</body>
+
+</html>
