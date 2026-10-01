@@ -33,6 +33,7 @@ function loadClothingItems() {
 
     });
 
+    setupCardActions();
 }
 
 
@@ -163,4 +164,55 @@ function createClothingCard(item) {
     `;
 
     return card;
+}
+
+function setupCardActions() {
+
+    const editButtons =
+        document.querySelectorAll(".edit-btn");
+
+    const deleteButtons =
+        document.querySelectorAll(".delete-btn");
+
+
+    /* EDIT */
+
+    editButtons.forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                const id =
+                    button.dataset.id;
+
+                window.location.href =
+                    `add-item.html?id=${id}`;
+
+            }
+        );
+
+    });
+
+
+    /* DELETE */
+
+    deleteButtons.forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                const id =
+                    Number(button.dataset.id);
+
+                deleteClothingItem(id);
+
+                loadClothingItems();
+
+            }
+        );
+
+    });
+
 }

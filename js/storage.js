@@ -34,11 +34,40 @@ function addClothingItem(item) {
 
 function deleteClothingItem(id) {
 
-    const items = getClothingItems();
+    const items =
+        getClothingItems();
 
-    const updatedItems = items.filter(
-        item => item.id !== id
+
+    const item =
+        items.find(
+            item => item.id === id
+        );
+
+
+    if (!item) {
+        return;
+    }
+
+
+    const confirmed =
+        confirm(
+            `Are you sure you want to delete "${item.name}"?`
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    const updatedItems =
+        items.filter(
+            item => item.id !== id
+        );
+
+
+    saveClothingItems(
+        updatedItems
     );
 
-    saveClothingItems(updatedItems);
 }
