@@ -1,6 +1,17 @@
+let currentCategory = "All";
+let currentSearch = "";
+
 document.addEventListener(
     "DOMContentLoaded",
-    loadClothingItems
+    () => {
+
+        loadClothingItems();
+
+        setupSearch();
+
+        setupCategoryFilters();
+
+    }
 );
 
 
@@ -9,22 +20,36 @@ function loadClothingItems() {
     const container =
         document.getElementById("clothingContainer");
 
+
     if (!container) {
         return;
     }
 
-    const items = getClothingItems();
+
+    const items =
+        getClothingItems();
+
 
     updateStatistics(items);
 
-    if (items.length === 0) {
-        showEmptyState(container);
+
+    const filteredItems =
+        filterClothingItems(items);
+
+
+    if (filteredItems.length === 0) {
+
+        showNoResults(container);
+
         return;
+
     }
+
 
     container.innerHTML = "";
 
-    items.forEach(item => {
+
+    filteredItems.forEach(item => {
 
         const card =
             createClothingCard(item);
@@ -33,7 +58,53 @@ function loadClothingItems() {
 
     });
 
+
     setupCardActions();
+
+}
+
+function filterClothingItems(items) {
+
+    return items.filter(item => {
+
+        const matchesCategory =
+            currentCategory === "All" ||
+            item.category === currentCategory;
+
+
+        const searchText =
+            currentSearch.toLowerCase();
+
+
+        const matchesSearch =
+            item.name
+                .toLowerCase()
+                .includes(searchText) ||
+
+            item.category
+                .toLowerCase()
+                .includes(searchText) ||
+
+            item.color
+                .toLowerCase()
+                .includes(searchText) ||
+
+            item.season
+                .toLowerCase()
+                .includes(searchText) ||
+
+            item.occasion
+                .toLowerCase()
+                .includes(searchText);
+
+
+        return (
+            matchesCategory &&
+            matchesSearch
+        );
+
+    });
+
 }
 
 
@@ -214,5 +285,166 @@ function setupCardActions() {
         );
 
     });
+
+}
+
+
+function setupSearch() {
+
+    const searchInput =
+        document.getElementById("searchInput");
+
+
+    if (!searchInput) {
+        return;
+    }
+
+
+    searchInput.addEventListener(
+        "input",
+        event => {
+
+            currentSearch =
+                event.target.value.trim();
+
+            loadClothingItems();
+
+        }
+    );
+
+}
+
+function setupCategoryFilters() {
+
+    const filterButtons =
+        document.querySelectorAll(
+            ".filter-btn"
+        );
+
+
+    filterButtons.forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                currentCategory =
+                    button.dataset.category;
+
+
+                filterButtons.forEach(
+                    btn => {
+
+                        btn.classList.remove(
+                            "active"
+                        );
+
+                    }
+                );
+
+
+                button.classList.add(
+                    "active"
+                );
+
+
+                loadClothingItems();
+
+            }
+        );
+
+    });
+
+}
+
+function showNoResults(container) {
+
+    container.innerHTML = `
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+                🔍
+            </div>
+
+            <h3>
+                No clothing found
+            </h3>
+
+            <p>
+                Try a different search or category.
+            </p>
+
+            <button
+                class="secondary-btn"
+                id="clearFiltersBtn"
+                type="button"
+            >
+                Clear Filters
+            </button>
+
+        </div>
+
+    `;
+
+
+    const clearButton =
+        document.getElementById(
+            "clearFiltersBtn"
+        );
+
+
+    clearButton.addEventListener(
+        "click",
+        clearFilters
+    );
+
+}
+
+function clearFilters() {
+
+    currentCategory = "All";
+
+    currentSearch = "";
+
+
+    const searchInput =
+        document.getElementById("searchInput");
+
+
+    if (searchInput) {
+
+        searchInput.value = "";
+
+    }
+
+
+    const filterButtons =
+        document.querySelectorAll(
+            ".filter-btn"
+        );
+
+
+    filterButtons.forEach(button => {
+
+        button.classList.remove(
+            "active"
+        );
+
+
+        if (
+            button.dataset.category === "All"
+        ) {
+
+            button.classList.add(
+                "active"
+            );
+
+        }
+
+    });
+
+
+    loadClothingItems();
 
 }

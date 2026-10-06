@@ -764,3 +764,13 @@ footer {
     }
 
 }
+
+.empty-state .secondary-btn {
+    display: inline-block;
+
+    border: 1px solid var(--border);
+
+    cursor: pointer;
+
+    font-size: 14px;
+}
