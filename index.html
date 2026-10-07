@@ -14,13 +14,19 @@
 
     <!-- Navigation -->
     <header class="navbar">
-
         <div class="logo">
             👗 Digital Closet
         </div>
 
         <nav>
-            <a href="index.html" class="active">Wardrobe</a>
+            <a href="#" id="wardrobeLink" class="active">
+                Wardrobe
+            </a>
+
+            <a href="#" id="favoritesLink">
+                Favorites
+            </a>
+
             <a href="add-item.html" class="primary-btn">
                 + Add Clothing
             </a>
@@ -96,7 +102,7 @@
 
 
         <!-- Wardrobe -->
-        <section class="wardrobe">
+        <section class="wardrobe" id="wardrobeSection">
 
             <div class="section-heading">
 
@@ -114,64 +120,94 @@
             </div>
 
 
-            <!-- Category filters -->
-            <div class="filters">
+            <!-- Category filters and sorting -->
+            <div class="filter-row">
 
-                <button
-                    class="filter-btn active"
-                    data-category="All"
-                    type="button"
-                >
-                    All
-                </button>
+                <div class="filters">
 
-                <button
-                    class="filter-btn"
-                    data-category="Tops"
-                    type="button"
-                >
-                    Tops
-                </button>
+                    <button
+                        class="filter-btn active"
+                        data-category="All"
+                        type="button"
+                    >
+                        All
+                    </button>
 
-                <button
-                    class="filter-btn"
-                    data-category="Bottoms"
-                    type="button"
-                >
-                    Bottoms
-                </button>
+                    <button
+                        class="filter-btn"
+                        data-category="Tops"
+                        type="button"
+                    >
+                        Tops
+                    </button>
 
-                <button
-                    class="filter-btn"
-                    data-category="Dresses"
-                    type="button"
-                >
-                    Dresses
-                </button>
+                    <button
+                        class="filter-btn"
+                        data-category="Bottoms"
+                        type="button"
+                    >
+                        Bottoms
+                    </button>
 
-                <button
-                    class="filter-btn"
-                    data-category="Shoes"
-                    type="button"
-                >
-                    Shoes
-                </button>
+                    <button
+                        class="filter-btn"
+                        data-category="Dresses"
+                        type="button"
+                    >
+                        Dresses
+                    </button>
 
-                <button
-                    class="filter-btn"
-                    data-category="Accessories"
-                    type="button"
-                >
-                    Accessories
-                </button>
+                    <button
+                        class="filter-btn"
+                        data-category="Shoes"
+                        type="button"
+                    >
+                        Shoes
+                    </button>
 
-                <button
-                    class="filter-btn"
-                    data-category="Outerwear"
-                    type="button"
-                >
-                    Outerwear
-                </button>
+                    <button
+                        class="filter-btn"
+                        data-category="Accessories"
+                        type="button"
+                    >
+                        Accessories
+                    </button>
+
+                    <button
+                        class="filter-btn"
+                        data-category="Outerwear"
+                        type="button"
+                    >
+                        Outerwear
+                    </button>
+
+                </div>
+
+                <div class="sort-control">
+
+                    <label for="sortSelect">Sort by</label>
+
+                    <select id="sortSelect">
+
+                        <option value="newest">
+                            Newest First
+                        </option>
+
+                        <option value="oldest">
+                            Oldest First
+                        </option>
+
+                        <option value="name-asc">
+                            Name A → Z
+                        </option>
+
+                        <option value="name-desc">
+                            Name Z → A
+                        </option>
+
+                    </select>
+
+                </div>
 
             </div>
 

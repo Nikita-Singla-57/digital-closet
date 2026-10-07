@@ -1,65 +1,88 @@
 let currentCategory = "All";
 let currentSearch = "";
+let currentSort = "newest";
+let showFavoritesOnly = false;
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        loadClothingItems();
-
-        setupSearch();
-
-        setupCategoryFilters();
-
-    }
-);
-
+document.addEventListener("DOMContentLoaded", () => {
+    loadClothingItems();
+    setupSearch();
+    setupCategoryFilters();
+    setupSorting();
+    setupFavorites();
+});
 
 function loadClothingItems() {
-
-    const container =
-        document.getElementById("clothingContainer");
-
-
-    if (!container) {
-        return;
-    }
-
-
-    const items =
-        getClothingItems();
-
+    const items = getClothingItems();
 
     updateStatistics(items);
 
+    let filteredItems = filterClothingItems(items);
 
-    const filteredItems =
-        filterClothingItems(items);
+    filteredItems = sortClothingItems(filteredItems);
 
-
-    if (filteredItems.length === 0) {
-
-        showNoResults(container);
-
-        return;
-
-    }
-
+    const container = document.getElementById("clothingContainer");
 
     container.innerHTML = "";
 
+    if (filteredItems.length === 0) {
+        showNoResults(container);
+        return;
+    }
 
     filteredItems.forEach(item => {
-
-        const card =
-            createClothingCard(item);
-
+        const card = createClothingCard(item);
         container.appendChild(card);
+    });
+
+    setupCardActions();
+}
+
+function setupFavorites() {
+
+    const favoritesLink =
+        document.getElementById("favoritesLink");
+
+    const wardrobeLink =
+        document.getElementById("wardrobeLink");
+
+
+    favoritesLink.addEventListener("click", event => {
+
+        event.preventDefault();
+
+        showFavoritesOnly = true;
+
+        favoritesLink.classList.add("active");
+        wardrobeLink.classList.remove("active");
+
+        loadClothingItems();
+
+        setTimeout(() => {
+            document.getElementById("clothingContainer").scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        }, 50);
 
     });
 
 
-    setupCardActions();
+    wardrobeLink.addEventListener("click", event => {
+
+        event.preventDefault();
+
+        showFavoritesOnly = false;
+
+        wardrobeLink.classList.add("active");
+        favoritesLink.classList.remove("active");
+
+        loadClothingItems();
+
+        document.getElementById("wardrobeSection").scrollIntoView({
+            behavior: "smooth"
+        });
+
+    });
 
 }
 
@@ -97,16 +120,57 @@ function filterClothingItems(items) {
                 .toLowerCase()
                 .includes(searchText);
 
+        const matchesFavorites =
+            !showFavoritesOnly || item.favorite === true;
 
         return (
             matchesCategory &&
-            matchesSearch
+            matchesSearch &&
+            matchesFavorites
         );
 
     });
 
 }
 
+function sortClothingItems(items) {
+    const sortedItems = [...items];
+
+    switch (currentSort) {
+
+        case "newest":
+            sortedItems.sort((a, b) => b.id - a.id);
+            break;
+
+        case "oldest":
+            sortedItems.sort((a, b) => a.id - b.id);
+            break;
+
+        case "name-asc":
+            sortedItems.sort((a, b) =>
+                a.name.localeCompare(b.name)
+            );
+            break;
+
+        case "name-desc":
+            sortedItems.sort((a, b) =>
+                b.name.localeCompare(a.name)
+            );
+            break;
+    }
+
+    return sortedItems;
+}
+
+function setupSorting() {
+    const sortSelect = document.getElementById("sortSelect");
+
+    sortSelect.addEventListener("change", () => {
+        currentSort = sortSelect.value;
+
+        loadClothingItems();
+    });
+}
 
 function updateStatistics(items) {
 
@@ -150,144 +214,106 @@ function updateStatistics(items) {
 }
 
 function createClothingCard(item) {
-
-    const card = document.createElement("article");
-
+    const card = document.createElement("div");
     card.className = "clothing-card";
 
     card.innerHTML = `
-    
         <div class="clothing-image">
-
             ${
                 item.image
-                ? `
-                    <img
-                        src="${item.image}"
-                        alt="${item.name}"
-                    >
-                `
-                : `
-                    <span>👕</span>
-                `
+                    ? `<img src="${item.image}" alt="${item.name}">`
+                    : `<span>👕</span>`
             }
-
         </div>
 
-
         <div class="clothing-info">
+            <div class="clothing-title-row">
+                <h3 class="clothing-title">${item.name}</h3>
 
-            <div class="clothing-title">
-
-                <h3>
-                    ${item.name}
-                </h3>
-
-                ${
-                    item.favorite
-                    ? `<span class="favorite-icon">♥</span>`
-                    : ""
-                }
-
-            </div>
-
-
-            <p class="clothing-category">
-                ${item.category}
-            </p>
-
-
-            <div class="clothing-details">
-
-                <span>
-                    ${item.color}
-                </span>
-
-                <span>
-                    ${item.season}
-                </span>
-
-            </div>
-
-
-            <div class="card-actions">
-
-                <button
-                    class="edit-btn"
+                <button 
+                    class="favorite-icon ${item.favorite ? "active" : ""}"
                     data-id="${item.id}"
                     type="button"
+                    title="${item.favorite ? "Remove from favorites" : "Add to favorites"}"
                 >
-                    Edit
+                    ${item.favorite ? "❤️" : "♡"}
                 </button>
+            </div>
 
-                <button
+            <p class="clothing-category">${item.category}</p>
+
+            <div class="clothing-details">
+                <span>${item.color}</span>
+                <span>${item.season}</span>
+                <span>${item.occasion}</span>
+            </div>
+
+            <div class="card-actions">
+                <a href="add-item.html?id=${item.id}" class="edit-btn">
+                    Edit
+                </a>
+
+                <button 
                     class="delete-btn"
                     data-id="${item.id}"
                     type="button"
                 >
                     Delete
                 </button>
-
             </div>
-
         </div>
-
     `;
 
     return card;
 }
 
 function setupCardActions() {
-
-    const editButtons =
-        document.querySelectorAll(".edit-btn");
-
-    const deleteButtons =
-        document.querySelectorAll(".delete-btn");
-
-
-    /* EDIT */
+    const editButtons = document.querySelectorAll(".edit-btn");
+    const deleteButtons = document.querySelectorAll(".delete-btn");
+    const favoriteButtons = document.querySelectorAll(".favorite-icon");
 
     editButtons.forEach(button => {
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                const id =
-                    button.dataset.id;
-
-                window.location.href =
-                    `add-item.html?id=${id}`;
-
-            }
-        );
-
+        button.addEventListener("click", () => {
+            // Edit is handled by the link itself
+        });
     });
-
-
-    /* DELETE */
 
     deleteButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            const id = Number(button.dataset.id);
 
-        button.addEventListener(
-            "click",
-            () => {
-
-                const id =
-                    Number(button.dataset.id);
-
-                deleteClothingItem(id);
-
-                loadClothingItems();
-
-            }
-        );
-
+            deleteClothingItem(id);
+            loadClothingItems();
+        });
     });
 
+    favoriteButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            const id = Number(button.dataset.id);
+
+            toggleFavorite(id);
+        });
+    });
 }
 
+function toggleFavorite(id) {
+    const items = getClothingItems();
+
+    const updatedItems = items.map(item => {
+        if (item.id === id) {
+            return {
+                ...item,
+                favorite: !item.favorite
+            };
+        }
+
+        return item;
+    });
+
+    saveClothingItems(updatedItems);
+
+    loadClothingItems();
+}
 
 function setupSearch() {
 
@@ -407,6 +433,7 @@ function clearFilters() {
 
     currentSearch = "";
 
+    showFavoritesOnly = false;
 
     const searchInput =
         document.getElementById("searchInput");
@@ -448,3 +475,4 @@ function clearFilters() {
     loadClothingItems();
 
 }
+
