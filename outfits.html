@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Outfits | Digital Closet</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+    <header class="navbar">
+
+        <div class="logo">
+            👗 Digital Closet
+        </div>
+
+        <nav>
+
+            <a href="index.html">
+                Wardrobe
+            </a>
+
+            <a href="index.html">
+                Favorites
+            </a>
+
+            <a href="outfits.html" class="active">
+                Outfits
+            </a>
+
+            <a href="add-item.html" class="primary-btn">
+                + Add Clothing
+            </a>
+
+        </nav>
+
+        <button
+            class="theme-btn"
+            id="themeBtn"
+            type="button"
+        >
+            ☾
+        </button>
+
+    </header>
+
+
+    <!-- Main content -->
+    <main>
+
+        <section class="outfits-section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <p class="subtitle">
+                        YOUR OUTFITS
+                    </p>
+
+                    <h1>
+                        My Outfits
+                    </h1>
+
+                    <p>
+                        Create and organize your favorite
+                        clothing combinations.
+                    </p>
+
+                </div>
+
+                <button
+                    class="primary-btn"
+                    id="createOutfitBtn"
+                    type="button"
+                >
+                    + Create Outfit
+                </button>
+
+            </div>
+
+
+            <!-- Outfits will appear here -->
+            <div id="outfitsContainer" class="outfits-grid">
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        👗
+                    </div>
+
+                    <h3>
+                        No outfits yet
+                    </h3>
+
+                    <p>
+                        Create your first outfit
+                        using your wardrobe.
+                    </p>
+
+                    <button
+                        class="primary-btn"
+                        id="emptyCreateOutfitBtn"
+                        type="button"
+                    >
+                        + Create Outfit
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- Create Outfit Form -->
+
+            <section
+                class="outfit-builder"
+                id="outfitBuilder"
+                hidden
+            >
+
+                <div class="outfit-builder-header">
+
+                    <div>
+                        <p class="subtitle">
+                            NEW OUTFIT
+                        </p>
+
+                        <h2>
+                            Create an Outfit
+                        </h2>
+
+                        <p>
+                            Choose clothing items from your wardrobe.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="outfitName">
+                        Outfit Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="outfitName"
+                        placeholder="e.g. College Casual"
+                    >
+
+                </div>
+
+
+                <div class="outfit-items-section">
+
+                    <h3>
+                        Select Clothing
+                    </h3>
+
+                    <div
+                        id="outfitItemsContainer"
+                        class="outfit-selection-grid"
+                    >
+                    </div>
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <button
+                        type="button"
+                        class="secondary-btn"
+                        id="cancelOutfitBtn"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="button"
+                        class="primary-btn"
+                        id="saveOutfitBtn"
+                    >
+                        Save Outfit
+                    </button>
+
+                </div>
+
+            </section>
+
+    </main>
+
+    <!-- Outfit Details Modal -->
+
+    <div
+        class="outfit-modal"
+        id="outfitModal"
+        hidden
+    >
+
+        <div class="outfit-modal-content">
+
+            <button
+                class="outfit-modal-close"
+                id="closeOutfitModal"
+                type="button"
+            >
+                ×
+            </button>
+
+            <p class="subtitle">
+                OUTFIT DETAILS
+            </p>
+
+            <h2 id="modalOutfitName">
+                Outfit Name
+            </h2>
+
+            <div
+                id="modalOutfitItems"
+                class="modal-outfit-items"
+            >
+            </div>
+
+        </div>
+
+    </div>
+
+    <footer class="footer">
+
+        <p>
+            © 2026 Digital Closet
+        </p>
+
+    </footer>
+
+
+    <script src="js/storage.js"></script>
+    <script src="js/outfits.js"></script>
+
+</body>
+
+</html>

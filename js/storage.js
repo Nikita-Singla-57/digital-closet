@@ -71,3 +71,81 @@ function deleteClothingItem(id) {
     );
 
 }
+
+const OUTFITS_STORAGE_KEY = "digitalClosetOutfits";
+
+
+function getOutfits() {
+
+    const outfits =
+        localStorage.getItem(OUTFITS_STORAGE_KEY);
+
+    if (!outfits) {
+        return [];
+    }
+
+    return JSON.parse(outfits);
+}
+
+
+function saveOutfits(outfits) {
+
+    localStorage.setItem(
+        OUTFITS_STORAGE_KEY,
+        JSON.stringify(outfits)
+    );
+}
+
+
+function saveOutfitToStorage(outfit) {
+
+    const outfits = getOutfits();
+
+    outfits.push(outfit);
+
+    saveOutfits(outfits);
+
+}
+
+function deleteOutfit(id) {
+
+    const outfits = getOutfits();
+
+    const outfit = outfits.find(
+        outfit => outfit.id === id
+    );
+
+    if (!outfit) {
+        return;
+    }
+
+    const confirmed = confirm(
+        `Are you sure you want to delete "${outfit.name}"?`
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    const updatedOutfits = outfits.filter(
+        outfit => outfit.id !== id
+    );
+
+    saveOutfits(updatedOutfits);
+}
+
+function updateOutfit(updatedOutfit) {
+
+    const outfits = getOutfits();
+
+    const updatedOutfits = outfits.map(outfit => {
+
+        if (outfit.id === updatedOutfit.id) {
+            return updatedOutfit;
+        }
+
+        return outfit;
+    });
+
+    saveOutfits(updatedOutfits);
+}
