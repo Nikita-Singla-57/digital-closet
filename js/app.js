@@ -9,6 +9,42 @@ document.addEventListener("DOMContentLoaded", () => {
     setupCategoryFilters();
     setupSorting();
     setupFavorites();
+
+    const params = new URLSearchParams(window.location.search);
+    const view = params.get("view");
+
+    if (view === "favorites") {
+        showFavoritesOnly = true;
+
+        document.getElementById("wardrobeLink").classList.remove("active");
+        document.getElementById("favoritesLink").classList.add("active");
+
+        loadClothingItems();
+
+        setTimeout(() => {
+            document.getElementById("clothingContainer").scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        }, 50);
+    }
+
+    if (view === "wardrobe") {
+        showFavoritesOnly = false;
+
+        document.getElementById("favoritesLink").classList.remove("active");
+        document.getElementById("wardrobeLink").classList.add("active");
+
+        loadClothingItems();
+
+        setTimeout(() => {
+            document.getElementById("clothingContainer").scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        }, 50);
+    }
+
 });
 
 function loadClothingItems() {

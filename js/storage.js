@@ -1,9 +1,30 @@
-const STORAGE_KEY = "digitalClosetItems";
+// Get the currently logged-in user's ID.
+function getCurrentUserId() {
+    return localStorage.getItem("digitalClosetCurrentUser");
+}
 
+// Generate a separate storage key for each user.
+function getClothingStorageKey() {
+    return `digitalClosetItems_${getCurrentUserId()}`;
+}
+
+function getOutfitsStorageKey() {
+    return `digitalClosetOutfits_${getCurrentUserId()}`;
+}
+
+
+// ---------------- CLOTHING STORAGE ----------------
 
 function getClothingItems() {
+    const userId = getCurrentUserId();
 
-    const items = localStorage.getItem(STORAGE_KEY);
+    if (!userId) {
+        return [];
+    }
+
+    const items = localStorage.getItem(
+        getClothingStorageKey()
+    );
 
     if (!items) {
         return [];
@@ -12,18 +33,18 @@ function getClothingItems() {
     return JSON.parse(items);
 }
 
-
 function saveClothingItems(items) {
+    if (!getCurrentUserId()) {
+        return;
+    }
 
     localStorage.setItem(
-        STORAGE_KEY,
+        getClothingStorageKey(),
         JSON.stringify(items)
     );
 }
 
-
 function addClothingItem(item) {
-
     const items = getClothingItems();
 
     items.push(item);
@@ -31,54 +52,45 @@ function addClothingItem(item) {
     saveClothingItems(items);
 }
 
-
 function deleteClothingItem(id) {
+    const items = getClothingItems();
 
-    const items =
-        getClothingItems();
-
-
-    const item =
-        items.find(
-            item => item.id === id
-        );
-
+    const item = items.find(
+        item => item.id === id
+    );
 
     if (!item) {
         return;
     }
 
-
-    const confirmed =
-        confirm(
-            `Are you sure you want to delete "${item.name}"?`
-        );
-
+    const confirmed = confirm(
+        `Are you sure you want to delete "${item.name}"?`
+    );
 
     if (!confirmed) {
         return;
     }
 
-
-    const updatedItems =
-        items.filter(
-            item => item.id !== id
-        );
-
-
-    saveClothingItems(
-        updatedItems
+    const updatedItems = items.filter(
+        item => item.id !== id
     );
 
+    saveClothingItems(updatedItems);
 }
 
-const OUTFITS_STORAGE_KEY = "digitalClosetOutfits";
 
+// ---------------- OUTFIT STORAGE ----------------
 
 function getOutfits() {
+    const userId = getCurrentUserId();
 
-    const outfits =
-        localStorage.getItem(OUTFITS_STORAGE_KEY);
+    if (!userId) {
+        return [];
+    }
+
+    const outfits = localStorage.getItem(
+        getOutfitsStorageKey()
+    );
 
     if (!outfits) {
         return [];
@@ -87,28 +99,26 @@ function getOutfits() {
     return JSON.parse(outfits);
 }
 
-
 function saveOutfits(outfits) {
+    if (!getCurrentUserId()) {
+        return;
+    }
 
     localStorage.setItem(
-        OUTFITS_STORAGE_KEY,
+        getOutfitsStorageKey(),
         JSON.stringify(outfits)
     );
 }
 
-
 function saveOutfitToStorage(outfit) {
-
     const outfits = getOutfits();
 
     outfits.push(outfit);
 
     saveOutfits(outfits);
-
 }
 
 function deleteOutfit(id) {
-
     const outfits = getOutfits();
 
     const outfit = outfits.find(
@@ -135,11 +145,9 @@ function deleteOutfit(id) {
 }
 
 function updateOutfit(updatedOutfit) {
-
     const outfits = getOutfits();
 
     const updatedOutfits = outfits.map(outfit => {
-
         if (outfit.id === updatedOutfit.id) {
             return updatedOutfit;
         }

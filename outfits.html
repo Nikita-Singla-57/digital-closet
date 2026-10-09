@@ -28,11 +28,11 @@
 
         <nav>
 
-            <a href="index.html">
+            <a href="index.html?view=wardrobe">
                 Wardrobe
             </a>
 
-            <a href="index.html">
+            <a href="index.html?view=favorites">
                 Favorites
             </a>
 
@@ -43,6 +43,16 @@
             <a href="add-item.html" class="primary-btn">
                 + Add Clothing
             </a>
+
+            <span id="currentUserName" class="user-greeting"></span>
+
+            <button
+                type="button"
+                id="logoutBtn"
+                class="logout-btn"
+            >
+                Logout
+            </button>
 
         </nav>
 
@@ -163,6 +173,37 @@
                     >
 
                 </div>
+  
+                <div class="form-group outfit-cover-group">
+                    <label for="outfitCoverImage">
+                        Outfit Cover Photo <span>(Optional)</span>
+                    </label>
+
+                    <p class="cover-help">
+                        Upload a photo of your complete look, or leave this empty
+                        to use your selected clothing photos.
+                    </p>
+
+                    <label for="outfitCoverImage" class="cover-upload-area">
+                        <span class="cover-upload-icon">📷</span>
+                        <span>Choose a cover photo</span>
+                        <span class="cover-upload-hint">JPG, PNG or WebP · Max 5 MB</span>
+                    </label>
+
+                    <input
+                        type="file"
+                        id="outfitCoverImage"
+                        accept="image/jpeg,image/png,image/webp"
+                    >
+
+                    <div id="coverPreviewContainer" class="cover-preview-container" hidden>
+                        <img id="coverPreview" src="" alt="Outfit cover preview">
+
+                        <button type="button" id="removeCoverImageBtn" class="remove-cover-btn">
+                            Remove photo
+                        </button>
+                    </div>
+                </div>
 
 
                 <div class="outfit-items-section">
@@ -248,7 +289,7 @@
 
     </footer>
 
-
+    <script src="js/auth.js"></script>
     <script src="js/storage.js"></script>
     <script src="js/outfits.js"></script>
 

@@ -1,10 +1,20 @@
 let editingOutfitId = null;
 
+let selectedCoverImage = "";
+let coverImageChanged = false;
+
 document.addEventListener("DOMContentLoaded", () => {
 
     loadOutfits();
 
     setupOutfitModal();
+
+    const coverInput = document.getElementById("outfitCoverImage");
+    const removeCoverBtn = document.getElementById("removeCoverImageBtn");
+
+    coverInput.addEventListener("change", handleCoverImageChange);
+    removeCoverBtn.addEventListener("click", removeCoverImage);
+
 
     const createOutfitBtn =
         document.getElementById("createOutfitBtn");
@@ -34,7 +44,96 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+function displayCoverPreview(imageData) {
+    const preview = document.getElementById("coverPreview");
+    const container = document.getElementById("coverPreviewContainer");
+
+    preview.src = imageData;
+    container.hidden = false;
+}
+
+function clearCoverPreview() {
+    document.getElementById("coverPreview").removeAttribute("src");
+    document.getElementById("coverPreviewContainer").hidden = true;
+}
+
+function handleCoverImageChange(event) {
+    const file = event.target.files[0];
+
+    if (!file) return;
+
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+
+    if (!allowedTypes.includes(file.type)) {
+        alert("Please choose a JPG, PNG, or WebP image.");
+        event.target.value = "";
+        return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+        alert("Please choose an image smaller than 5 MB.");
+        event.target.value = "";
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+        const image = new Image();
+
+        image.onload = () => {
+            const maxDimension = 1000;
+            const scale = Math.min(
+                1,
+                maxDimension / Math.max(image.width, image.height)
+            );
+
+            const canvas = document.createElement("canvas");
+            canvas.width = Math.round(image.width * scale);
+            canvas.height = Math.round(image.height * scale);
+
+            const context = canvas.getContext("2d");
+            context.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+            selectedCoverImage = canvas.toDataURL("image/jpeg", 0.75);
+            coverImageChanged = true;
+
+            displayCoverPreview(selectedCoverImage);
+        };
+
+        image.onerror = () => {
+            alert("This image could not be opened. Please try another.");
+            event.target.value = "";
+        };
+
+        image.src = reader.result;
+    };
+
+    reader.onerror = () => {
+        alert("Could not read this image. Please try again.");
+        event.target.value = "";
+    };
+
+    reader.readAsDataURL(file);
+}
+
+function removeCoverImage() {
+    selectedCoverImage = "";
+    coverImageChanged = true;
+
+    document.getElementById("outfitCoverImage").value = "";
+    clearCoverPreview();
+}
+
 function openOutfitBuilder() {
+
+    editingOutfitId = null;
+    selectedCoverImage = "";
+    coverImageChanged = false;
+
+    document.getElementById("outfitCoverImage").value = "";
+    clearCoverPreview();
+    document.getElementById("saveOutfitBtn").textContent = "Save Outfit";
 
     const builder =
         document.getElementById("outfitBuilder");
@@ -52,6 +151,12 @@ function openOutfitBuilder() {
 
 
 function closeOutfitBuilder() {
+
+    selectedCoverImage = "";
+    coverImageChanged = false;
+
+    document.getElementById("outfitCoverImage").value = "";
+    clearCoverPreview();
 
     const builder =
         document.getElementById("outfitBuilder");
@@ -193,7 +298,9 @@ function saveOutfit() {
 
             name: outfitName,
 
-            items: selectedItems
+            items: selectedItems,
+
+            coverImage: selectedCoverImage
 
         };
 
@@ -208,7 +315,9 @@ function saveOutfit() {
 
             name: outfitName,
 
-            items: selectedItems
+            items: selectedItems,
+
+            coverImage: selectedCoverImage
 
         };
 
@@ -346,9 +455,15 @@ function createOutfitCard(outfit) {
     card.innerHTML = `
 
         <div class="outfit-card-images">
-
-            ${images}
-
+            ${
+                outfit.coverImage
+                    ? `<img
+                        src="${outfit.coverImage}"
+                        alt="${outfit.name} cover photo"
+                        class="outfit-cover-image"
+                    >`
+                    : images
+            }
         </div>
 
 
@@ -469,6 +584,17 @@ function editOutfit(id) {
 
     outfitName.value = outfit.name;
 
+    selectedCoverImage = outfit.coverImage || "";
+    coverImageChanged = false;
+
+    document.getElementById("outfitCoverImage").value = "";
+
+    if (selectedCoverImage) {
+        displayCoverPreview(selectedCoverImage);
+    } else {
+        clearCoverPreview();
+}
+
     saveButton.textContent = "Update Outfit";
 
 
@@ -525,6 +651,18 @@ function openOutfitDetails(id) {
         document.getElementById("modalOutfitItems");
 
     container.innerHTML = "";
+
+    if (outfit.coverImage) {
+        const cover = document.createElement("div");
+        cover.className = "modal-outfit-cover";
+
+        const image = document.createElement("img");
+        image.src = outfit.coverImage;
+        image.alt = `${outfit.name} cover photo`;
+
+        cover.appendChild(image);
+        container.appendChild(cover);
+    }
 
 
     selectedItems.forEach(item => {
