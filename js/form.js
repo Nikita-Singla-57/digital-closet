@@ -181,32 +181,39 @@ function handleFormSubmit(event) {
 
     if (editId) {
 
+        const existingItem = getClothingItems().find(
+            item => item.id === Number(editId)
+        );
+
+        if (!existingItem) {
+            alert("Clothing item not found.");
+            return;
+        }
+
         updateExistingItem({
+            ...existingItem,
 
             id: Number(editId),
-
             name: name,
-
             category: category,
-
             color: color,
-
             season: season,
-
             occasion: occasion,
-
             size: size,
-
             favorite: favorite,
+            image: imageData,
 
-            image: imageData
+            // Preserve existing timeline information
+            dateAdded: existingItem.dateAdded || null,
+            purchaseDate: existingItem.purchaseDate || null,
+            lastWornDate: existingItem.lastWornDate || null,
+            wearCount: existingItem.wearCount || 0,
 
+            // Keep archived items archived when edited
+            status: existingItem.status || "active"
         });
 
-
-        window.location.href =
-            "index.html";
-
+        window.location.href = "index.html";
         return;
     }
 
@@ -231,7 +238,16 @@ function handleFormSubmit(event) {
 
         favorite: favorite,
 
-        image: imageData
+        image: imageData,
+
+        // Wardrobe timeline
+        dateAdded: new Date().toISOString().split("T")[0],
+        purchaseDate: null,
+        lastWornDate: null,
+        wearCount: 0,
+
+        // Wardrobe lifecycle
+        status: "active"
 
     };
 

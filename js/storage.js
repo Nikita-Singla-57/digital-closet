@@ -79,6 +79,109 @@ function deleteClothingItem(id) {
 }
 
 
+/* =========================
+   CLOTHING LIFECYCLE
+========================= */
+
+// Archive clothing without permanently deleting it.
+function archiveClothingItem(id) {
+    const items = getClothingItems();
+
+    const itemExists = items.some(
+        item => item.id === id
+    );
+
+    if (!itemExists) {
+        return false;
+    }
+
+    const updatedItems = items.map(item => {
+        if (item.id === id) {
+            return {
+                ...item,
+                status: "archived",
+                archivedDate: new Date()
+                    .toISOString()
+                    .split("T")[0]
+            };
+        }
+
+        return item;
+    });
+
+    saveClothingItems(updatedItems);
+    return true;
+}
+
+
+// Restore an archived clothing item.
+function restoreClothingItem(id) {
+    const items = getClothingItems();
+
+    const itemExists = items.some(
+        item => item.id === id
+    );
+
+    if (!itemExists) {
+        return false;
+    }
+
+    const updatedItems = items.map(item => {
+        if (item.id === id) {
+            return {
+                ...item,
+                status: "active",
+                archivedDate: null
+            };
+        }
+
+        return item;
+    });
+
+    saveClothingItems(updatedItems);
+    return true;
+}
+
+
+// Record that a clothing item was worn today.
+function recordClothingWear(id) {
+    const items = getClothingItems();
+
+    const item = items.find(
+        item => item.id === id
+    );
+
+    if (!item) {
+        return false;
+    }
+
+    if (item.status === "archived") {
+        alert("Restore this item before recording it as worn.");
+        return false;
+    }
+
+    const today = new Date()
+        .toISOString()
+        .split("T")[0];
+
+    const updatedItems = items.map(item => {
+        if (item.id === id) {
+            return {
+                ...item,
+                lastWornDate: today,
+                wearCount: (item.wearCount || 0) + 1
+            };
+        }
+
+        return item;
+    });
+
+    saveClothingItems(updatedItems);
+    return true;
+}
+
+
+
 // ---------------- OUTFIT STORAGE ----------------
 
 function getOutfits() {

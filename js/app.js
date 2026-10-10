@@ -2,6 +2,7 @@ let currentCategory = "All";
 let currentSearch = "";
 let currentSort = "newest";
 let showFavoritesOnly = false;
+let showArchivedOnly = false;
 
 document.addEventListener("DOMContentLoaded", () => {
     loadClothingItems();
@@ -12,6 +13,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const params = new URLSearchParams(window.location.search);
     const view = params.get("view");
+    if (view === "archived") {
+        showArchivedOnly = true;
+        showFavoritesOnly = false;
+
+        document.getElementById("wardrobeLink")
+            .classList.remove("active");
+
+        document.getElementById("favoritesLink")
+            .classList.remove("active");
+
+        document.getElementById("archivedLink")
+            .classList.add("active");
+
+        loadClothingItems();
+    }
 
     if (view === "favorites") {
         showFavoritesOnly = true;
@@ -81,12 +97,15 @@ function setupFavorites() {
     const wardrobeLink =
         document.getElementById("wardrobeLink");
 
+    const archivedLink =
+        document.getElementById("archivedLink");
 
     favoritesLink.addEventListener("click", event => {
 
         event.preventDefault();
 
         showFavoritesOnly = true;
+        showArchivedOnly = false;
 
         favoritesLink.classList.add("active");
         wardrobeLink.classList.remove("active");
@@ -108,6 +127,7 @@ function setupFavorites() {
         event.preventDefault();
 
         showFavoritesOnly = false;
+        showArchivedOnly = false;
 
         wardrobeLink.classList.add("active");
         favoritesLink.classList.remove("active");
@@ -118,6 +138,24 @@ function setupFavorites() {
             behavior: "smooth"
         });
 
+    });
+
+    archivedLink.addEventListener("click", event => {
+        event.preventDefault();
+
+        showArchivedOnly = true;
+        showFavoritesOnly = false;
+
+        archivedLink.classList.add("active");
+        document.getElementById("favoritesLink")
+            .classList.remove("active");
+        document.getElementById("wardrobeLink")
+            .classList.remove("active");
+
+        loadClothingItems();
+
+        document.getElementById("wardrobeSection")
+            .scrollIntoView({ behavior: "smooth" });
     });
 
 }
@@ -159,10 +197,16 @@ function filterClothingItems(items) {
         const matchesFavorites =
             !showFavoritesOnly || item.favorite === true;
 
+        const isArchived = item.status === "archived";
+
+        const matchesArchive =
+            showArchivedOnly ? isArchived : !isArchived;
+
         return (
             matchesCategory &&
             matchesSearch &&
-            matchesFavorites
+            matchesFavorites &&
+            matchesArchive
         );
 
     });
@@ -289,7 +333,25 @@ function createClothingCard(item) {
                     Edit
                 </a>
 
-                <button 
+                ${
+                    item.status === "archived"
+                        ? `<button
+                                class="restore-btn"
+                                data-id="${item.id}"
+                                type="button"
+                            >
+                                Restore
+                            </button>`
+                        : `<button
+                                class="archive-btn"
+                                data-id="${item.id}"
+                                type="button"
+                            >
+                                Archive
+                            </button>`
+                }
+
+                <button
                     class="delete-btn"
                     data-id="${item.id}"
                     type="button"
@@ -304,6 +366,11 @@ function createClothingCard(item) {
 }
 
 function setupCardActions() {
+    const archiveButtons =
+        document.querySelectorAll(".archive-btn");
+
+    const restoreButtons =
+        document.querySelectorAll(".restore-btn");
     const editButtons = document.querySelectorAll(".edit-btn");
     const deleteButtons = document.querySelectorAll(".delete-btn");
     const favoriteButtons = document.querySelectorAll(".favorite-icon");
@@ -328,6 +395,30 @@ function setupCardActions() {
             const id = Number(button.dataset.id);
 
             toggleFavorite(id);
+        });
+    });
+
+    archiveButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            const id = Number(button.dataset.id);
+
+            const confirmed = confirm(
+                "Move this item to your archived wardrobe?"
+            );
+
+            if (!confirmed) return;
+
+            archiveClothingItem(id);
+            loadClothingItems();
+        });
+    });
+
+    restoreButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            const id = Number(button.dataset.id);
+
+            restoreClothingItem(id);
+            loadClothingItems();
         });
     });
 }
